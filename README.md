@@ -62,13 +62,17 @@ az aks create --resource-group MyMicroserviceResources --name MyMicroserviceClus
 
 # Caso de erro de arquitetura
 
-1.Verifique ue o buildx está habilitado
+docker manifest inspect angeladlizuniplac/mymicroservice:latest
+
+1.Verifique se o buildx está habilitado
 ```docker buildx create --use```
 
 2. Construa e envie a imagem com suporte multi-plataforma
 ```docker buildx build --platform linux/amd64,linux/arm64 -t angeladlizuniplac/mymicroservice:latest --push .```
 
-(em caso de erro tente executar com ```docker buildx build --platform linux/amd64,linux/arm64 -t angeladlizuniplac/mymicroservice:latest --push . --builder-opt network=host --builder-opt env.BUILDKIT_STEP_LOG_MAX_SIZE=10485760```)
+Ps: Esse comando gerou o erro no video, pesquisando rapidamente pode ser estouro de memoria, apenas tentei executar novamente e passou. 
+Achei o comando abaixo que limita os recusos caso você ainda tenha erro: 
+ ```docker buildx build --platform linux/amd64,linux/arm64 -t angeladlizuniplac/mymicroservice:latest --push . --builder-opt network=host --builder-opt env.BUILDKIT_STEP_LOG_MAX_SIZE=10485760``` (Comando não testado)
 
 3. Delete o deployment atual
 ```kubectl delete deployment mymicroservice --ignore-not-found=true```
