@@ -34,9 +34,9 @@ E com isso você deve conseguir acessar com sucesso "http://localhost:3000/Weath
 
 Lembrete: Se ainda não tiver realizado o login não esqueça: ```docker login```
 
-```docker tag mymicroservice [YOUR DOCKER USERNAME]/mymicroservice```
+```docker tag mymicroservice angeladlizuniplac/mymicroservice```
 
-```docker push [YOUR DOCKER USERNAME]/mymicroservice```
+```docker push angeladlizuniplac/mymicroservice```
 
 # AZURE
 
@@ -49,4 +49,36 @@ Após concluir o tutorial da Azure você terá seu primeiro serviço implantado.
 Isso está no tutorial, mas vou trazer para cá como apoio: 
 
 O comando: ```kubectl get services``` irá listar serviços e será possível visualizar o EXTERNAL-IP.
-Com esse EXTERNAL-IP é possível acessar o seu serviço, exemplo: http://172.184.189.42:8080/WeatherForecast
+Com esse EXTERNAL-IP é possível acessar o seu serviço, exemplo: http://20.245.254.57:8080/WeatherForecast
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Comando depreciado microsoft: 
+az aks create --resource-group MyMicroserviceResources --name MyMicroserviceCluster --node-count 1 --enable-addons http_application_routing --generate-ssh-keys
+
+comando atualizado: 
+az aks create --resource-group MyMicroserviceResources --name MyMicroserviceCluster --node-count 1 --enable-addons web_application_routing --generate-ssh-keys
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+# Caso de erro de arquitetura
+
+1.Verifique ue o buildx está habilitado
+```docker buildx create --use```
+
+2. Construa e envie a imagem com suporte multi-plataforma
+```docker buildx build --platform linux/amd64,linux/arm64 -t angeladlizuniplac/mymicroservice:latest --push .```
+
+(em caso de erro tente executar com ```docker buildx build --platform linux/amd64,linux/arm64 -t angeladlizuniplac/mymicroservice:latest --push . --builder-opt network=host --builder-opt env.BUILDKIT_STEP_LOG_MAX_SIZE=10485760```)
+
+3. Delete o deployment atual
+```kubectl delete deployment mymicroservice --ignore-not-found=true```
+
+4. Faça o deploy novamente 
+```kubectl apply -f deploy.yaml```
+
+## Comandos uteis
+Verificar status dos pods:
+```kubectl get pods -o wide```
+
+listar serviços com seus respectivos ips:
+```kubectl get services```
