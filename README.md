@@ -38,6 +38,12 @@ Lembrete: Se ainda não tiver realizado o login não esqueça: ```docker login``
 
 ```docker push angeladlizuniplac/mymicroservice```
 
+Para executar o container do docker hub: 
+```docker run -d -p 3000:8080 --name mymicroservice angeladlizuniplac/mymicroservice```
+
+Para validar que deu certo acesse: http://localhost:3000/WeatherForecast
+
+
 # AZURE
 
 Siga o passo a passo do tutorial: https://dotnet.microsoft.com/en-us/learn/aspnet/deploy-microservice-tutorial/intro
